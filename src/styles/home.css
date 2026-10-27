@@ -1,0 +1,319 @@
+.app-shell .page-content.page-content--home {
+  padding: 0;
+}
+
+.search-hero {
+  display: grid;
+  place-items: center;
+  min-height: max(540px, calc(100svh - var(--header-height)));
+  padding: 72px 0 212px;
+  color: #fff;
+  background:
+    linear-gradient(90deg, rgb(12 14 17 / 78%), rgb(12 14 17 / 57%)),
+    url('/image/hero-mustang.png') center 48% / cover no-repeat;
+}
+
+.hero-content {
+  max-width: 920px;
+  text-align: center;
+}
+
+.hero-eyebrow {
+  margin-bottom: 24px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.search-hero h1 {
+  margin-bottom: 24px;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1.05;
+}
+
+.hero-description {
+  margin-bottom: 36px;
+  color: #e5e5e6;
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.75;
+}
+
+.search-form {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.search-label {
+  margin: 0 0 10px 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.search-controls {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 20%);
+}
+
+.search-input {
+  min-width: 0;
+  min-height: 52px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+.search-input:focus {
+  box-shadow: inset 0 0 0 2px var(--color-primary);
+}
+
+.search-input[aria-invalid='true'] {
+  box-shadow: inset 0 0 0 2px var(--color-primary);
+}
+
+.search-button,
+.part-details-link {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--color-primary);
+  --bs-btn-border-color: var(--color-primary);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-primary-hover);
+  --bs-btn-hover-border-color: var(--color-primary-hover);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color-primary-hover);
+  --bs-btn-active-border-color: var(--color-primary-hover);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: var(--color-primary);
+  --bs-btn-disabled-border-color: var(--color-primary);
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.search-button {
+  flex-shrink: 0;
+  min-width: 136px;
+  min-height: 52px;
+  padding: 12px 24px;
+}
+
+.search-hint {
+  min-height: 22px;
+  margin: 12px 20px 0;
+  color: #e5e5e6;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.search-results {
+  padding-top: 56px;
+  padding-bottom: 64px;
+  scroll-margin-top: calc(var(--header-height) + 24px);
+}
+
+.search-results h2 {
+  margin-bottom: 16px;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.search-status,
+.results-count {
+  margin: 0 0 28px;
+  color: var(--color-muted);
+  line-height: 1.75;
+}
+
+.search-status.alert {
+  color: var(--bs-alert-color);
+}
+
+.results-list {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgb(32 33 36 / 2%);
+  background: var(--color-background);
+}
+
+.results-table {
+  width: 100%;
+  table-layout: fixed;
+  --bs-table-bg: var(--color-background);
+  --bs-table-border-color: var(--color-border);
+}
+
+.results-table th,
+.results-table td {
+  padding: 22px 24px;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+.results-table th {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  color: var(--color-muted);
+  background: var(--color-background-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.results-table th:nth-child(1) {
+  width: 18%;
+}
+
+.results-table th:nth-child(2) {
+  width: 22%;
+}
+
+.results-table th:nth-child(4) {
+  width: 230px;
+}
+
+.results-table .part-brand {
+  color: var(--color-primary);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.results-table .part-number {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.results-table .part-name {
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.part-details-link {
+  max-width: 100%;
+  padding: 10px 20px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: 0.875rem;
+}
+
+.results-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .results-table th,
+  .results-table td {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .results-table th:nth-child(4) {
+    width: 180px;
+  }
+
+  .part-details-link {
+    padding-right: 12px;
+    padding-left: 12px;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .results-list {
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .results-table,
+  .results-table tbody {
+    display: block;
+    width: 100%;
+  }
+
+  .results-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .results-table .part-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+    padding: 24px;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    background: var(--color-background);
+    box-shadow: 0 6px 24px rgb(32 33 36 / 2%);
+  }
+
+  .results-table .part-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .results-table td {
+    min-width: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .results-table .part-number {
+    text-align: right;
+  }
+
+  .results-table .part-name,
+  .results-table .part-action {
+    grid-column: 1 / -1;
+  }
+
+  .part-details-link {
+    width: 100%;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .search-hero {
+    padding: 56px 0 196px;
+    background-position: center, 62% center;
+  }
+
+  .hero-content {
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+
+  .search-controls {
+    flex-direction: column;
+    border-radius: 16px;
+  }
+
+  .search-input {
+    border-radius: 10px;
+  }
+
+  .search-label,
+  .search-hint {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+
+  .search-results {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+}

@@ -1,10 +1,11 @@
 const isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
 const asArray = (value) => Array.isArray(value) ? value : [];
+const hasIdentityValue = (value) => (typeof value === 'string' || typeof value === 'number')
+  && String(value).trim() !== '';
 
 function normalizeGoods(goods) {
   return asArray(goods)
-    .filter((part) => isObject(part) && [part.brand, part.number, part.name, part.goodsID]
-      .some((value) => value !== undefined && value !== null && String(value).trim() !== ''))
+    .filter((part) => isObject(part) && hasIdentityValue(part.brand) && hasIdentityValue(part.number))
     .map((part) => ({
       goodsID: part.goodsID ?? null,
       brand: part.brand ?? null,

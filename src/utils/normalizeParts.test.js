@@ -30,6 +30,29 @@ test('warehouse prices, zero stock, dates and nonrefundable flags survive flatte
   assert.equal(Object.hasOwn(normalizeParts(response)[0], 'price'), false);
 });
 
+test('empty API placeholders with default ID or echoed number are not real goods', () => {
+  const emptyResponse = { goods: [
+    { goodsID: 0, brand: '', number: '', name: '', warehouses: [], analogues: [] },
+    { goodsID: '0', number: 'NOT-FOUND', brand: '  ', name: null },
+    { goodsID: 123 },
+    { number: 'NOT-FOUND' },
+    { brand: 'TEST' },
+    { name: ' ' },
+  ] };
+  assert.deepEqual(normalizeParts(emptyResponse), []);
+  assert.deepEqual(normalizePartDetails(emptyResponse, 'TEST'), { offers: [], analogues: [] });
+});
+
+test('valid identity survives missing optional name and zero stock alongside empty placeholders', () => {
+  const parts = normalizeParts({ goods: [
+    { goodsID: 0 },
+    { brand: 'TEST', number: '123', name: '', warehouses: [{ price: 10, stock: 0 }] },
+  ] });
+  assert.equal(parts.length, 1);
+  assert.equal(parts[0].number, '123');
+  assert.equal(parts[0].warehouses[0].stock, 0);
+});
+
 test('missing optional fields and warehouses do not manufacture offers', () => {
   const response = { goods: [{ brand: 'TEST', number: '123', warehouses: [], analogues: [{}] }] };
   assert.equal(normalizeParts(response)[0].name, null);

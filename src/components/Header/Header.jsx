@@ -12,7 +12,7 @@ export default function Header({ isMenuOpen, onMenuToggle, onMenuClose }) {
   }
 
   return (
-    <header className="site-header fixed-top" onKeyDown={handleKeyDown}>
+    <header className="site-header sticky-top" onKeyDown={handleKeyDown}>
       <div className="container header-inner">
         <Link to="/" className="brand" aria-label="YURAL FAVORIT — на главную" onClick={onMenuClose}>
           <span>YURAL</span> <span className="brand-accent">FAVORIT</span>
