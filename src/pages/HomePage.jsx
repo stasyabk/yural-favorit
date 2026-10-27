@@ -1,14 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import SearchBar from '../components/SearchBar/SearchBar.jsx';
 import PartCard from '../components/PartCard/PartCard.jsx';
-import { useLazyGetPartsByNumberQuery } from '../services/favoritApi.js';
+import { useGetPartsByNumberQuery, useLazyGetPartsByNumberQuery } from '../services/favoritApi.js';
+import { scrollToSearchResults } from '../utils/scroll.js';
 
 export default function HomePage() {
-  const [query, setQuery] = useState('');
+  const location = useLocation();
+  const navigate = useNavigate();
+  const savedSearch = location.state?.search;
+  const savedNumber = typeof savedSearch?.submittedQuery === 'string' ? savedSearch.submittedQuery : '';
+  const [query, setQuery] = useState(() => typeof savedSearch?.query === 'string' ? savedSearch.query : '');
   const [validationError, setValidationError] = useState('');
-  const [searchParts, { currentData, originalArgs, isUninitialized, isFetching, isError, error }] =
-    useLazyGetPartsByNumberQuery();
+  const [searchParts, submittedResult] = useLazyGetPartsByNumberQuery();
+  const restoredResult = useGetPartsByNumberQuery(savedNumber, {
+    skip: !savedNumber || !submittedResult.isUninitialized,
+    refetchOnMountOrArgChange: false,
+  });
+  const { currentData, originalArgs, isUninitialized, isFetching, isError, error } =
+    submittedResult.isUninitialized ? restoredResult : submittedResult;
+  const shouldScroll = useRef(false);
   const isEmptyResult = !isUninitialized && !isFetching && !isError && currentData?.length === 0;
+
+  useEffect(() => {
+    if (!shouldScroll.current || isUninitialized || isFetching) return;
+    shouldScroll.current = false;
+    const frame = requestAnimationFrame(() => scrollToSearchResults());
+    return () => cancelAnimationFrame(frame);
+  }, [currentData, isEmptyResult, isError, isFetching, isUninitialized]);
 
   function handleChange(value) {
     setQuery(value);
@@ -24,7 +43,13 @@ export default function HomePage() {
     }
     setValidationError('');
     setQuery(number);
+    shouldScroll.current = true;
     searchParts(number);
+    navigate(location.pathname + location.search, {
+      replace: true,
+      preventScrollReset: true,
+      state: { ...location.state, search: { query: number, submittedQuery: number } },
+    });
   }
 
   return (

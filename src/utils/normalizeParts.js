@@ -39,7 +39,7 @@ export function toOfferRows(parts) {
     brand: part.brand,
     number: part.number,
     name: part.name,
-    warehouse: warehouse.code ?? warehouse.id,
+    warehouse: hasIdentityValue(warehouse.code) ? warehouse.code : warehouse.id,
     price: warehouse.price,
     stock: warehouse.stock,
     shipmentDate: warehouse.shipmentDate,
@@ -50,8 +50,18 @@ export function toOfferRows(parts) {
 
 export function normalizePartDetails(response, brand) {
   const parts = normalizeParts(response).filter((part) => part.brand === brand);
+  const uniqueAnalogues = new Map();
+  for (const analogue of parts.flatMap((part) => part.analogues)) {
+    const key = JSON.stringify([analogue.brand, analogue.number]);
+    const existing = uniqueAnalogues.get(key);
+    if (!existing) {
+      uniqueAnalogues.set(key, { brand: analogue.brand, number: analogue.number, name: analogue.name });
+    } else if (!hasIdentityValue(existing.name) && hasIdentityValue(analogue.name)) {
+      existing.name = analogue.name;
+    }
+  }
   return {
     offers: toOfferRows(parts),
-    analogues: toOfferRows(parts.flatMap((part) => part.analogues)),
+    analogues: [...uniqueAnalogues.values()],
   };
 }

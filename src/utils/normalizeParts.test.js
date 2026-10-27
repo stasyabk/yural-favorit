@@ -26,7 +26,7 @@ test('warehouse prices, zero stock, dates and nonrefundable flags survive flatte
   assert.equal(offers[1].notRefund, false);
   assert.equal(offers[1].warehouse, 0);
   assert.equal(analogues[0].brand, 'OTHER');
-  assert.equal(analogues[0].stock, 0);
+  assert.deepEqual(analogues, [{ brand: 'OTHER', number: '456', name: null }]);
   assert.equal(Object.hasOwn(normalizeParts(response)[0], 'price'), false);
 });
 
@@ -63,4 +63,56 @@ test('duplicate offers are retained and other manufacturers are excluded from fi
   const part = { brand: 'TEST', number: '123', warehouses: [{ price: 5, stock: 1 }] };
   const response = { goods: [part, part, { ...part, brand: 'OTHER' }] };
   assert.equal(normalizePartDetails(response, 'TEST').offers.length, 2);
+});
+
+test('warehouse identifiers fall back from blank code to id and missing values remain unknown', () => {
+  const response = { goods: [{ brand: 'TEST', number: '123', warehouses: [
+    { code: '  ', id: 0, stock: 0 },
+    { code: 'A', id: 9, price: 25 },
+    {}, null,
+  ] }] };
+  const { offers } = normalizePartDetails(response, 'TEST');
+  assert.equal(offers.length, 2);
+  assert.equal(offers[0].warehouse, 0);
+  assert.equal(offers[0].price, null);
+  assert.equal(offers[0].stock, 0);
+  assert.equal(offers[1].warehouse, 'A');
+  assert.equal(offers[1].shipmentDate, null);
+});
+
+test('unique analogues include parts without warehouses and never expose warehouse fields', () => {
+  const analogue = { brand: 'OTHER', number: '456', price: 9999, warehouses: [
+    { id: 1, price: 15, stock: 0 }, { id: 2, price: 20, stock: 5 },
+  ] };
+  const response = { goods: [{ brand: 'TEST', number: '123', warehouses: [], analogues: [
+    { brand: 'EMPTY', number: '789' }, analogue, analogue,
+  ] }] };
+  const details = normalizePartDetails(response, 'TEST');
+  assert.deepEqual(details.offers, []);
+  assert.deepEqual(details.analogues, [
+    { brand: 'EMPTY', number: '789', name: null },
+    { brand: 'OTHER', number: '456', name: null },
+  ]);
+});
+
+test('analogue uniqueness uses both brand and number across parent goods and preserves first-seen order', () => {
+  const response = { goods: [
+    { brand: 'TEST', number: '123', warehouses: [{ id: 1, price: 10, stock: 0 }], analogues: [
+      { brand: 'A', number: '1', name: '' },
+      { brand: 'A', number: '2', name: 'Second' },
+      { brand: 'B', number: '1', name: 'Another brand' },
+    ] },
+    { brand: 'TEST', number: '123', warehouses: [{ id: 2, price: 20, stock: 1 }], analogues: [
+      { brand: 'A', number: '1', name: 'Available name' },
+      { brand: 'A', number: '2', name: 'Later name' },
+    ] },
+  ] };
+  const details = normalizePartDetails(response, 'TEST');
+  assert.equal(details.offers.length, 2);
+  assert.deepEqual(details.offers.map((row) => row.price), [10, 20]);
+  assert.deepEqual(details.analogues, [
+    { brand: 'A', number: '1', name: 'Available name' },
+    { brand: 'A', number: '2', name: 'Second' },
+    { brand: 'B', number: '1', name: 'Another brand' },
+  ]);
 });

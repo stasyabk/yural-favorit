@@ -1,0 +1,136 @@
+.part-details-page h1 {
+  margin-bottom: 20px;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.details-back {
+  display: inline-block;
+  margin-bottom: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.details-back:hover {
+  color: var(--color-primary);
+}
+
+.details-identity {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-bottom: 20px;
+  overflow-wrap: anywhere;
+}
+
+.details-identity strong {
+  color: var(--color-primary);
+}
+
+.details-note,
+.details-status,
+.offers-empty {
+  color: var(--color-muted);
+  line-height: 1.75;
+}
+
+.details-note {
+  margin-bottom: 32px;
+  font-size: 0.875rem;
+}
+
+.details-status {
+  margin-top: 32px;
+}
+
+.details-status.alert {
+  color: var(--bs-alert-color);
+}
+
+.offers-section {
+  margin-top: 40px;
+}
+
+.offers-section h2 {
+  margin-bottom: 20px;
+  font-size: clamp(1.375rem, 3vw, 1.75rem);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.offers-scroll,
+.offers-empty {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-background);
+}
+
+.offers-scroll:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 4px;
+}
+
+.offers-scroll {
+  height: auto;
+  max-height: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.offers-empty {
+  padding: 24px;
+}
+
+.offers-table {
+  min-width: 1100px;
+  table-layout: fixed;
+  --bs-table-bg: var(--color-background);
+  --bs-table-border-color: var(--color-border);
+}
+
+.offers-table th,
+.offers-table td {
+  padding: 18px 16px;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+  font-size: 0.8125rem;
+}
+
+.offers-table th {
+  color: var(--color-muted);
+  background: var(--color-background-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.offers-table th:nth-child(1) { width: 14%; }
+.offers-table th:nth-child(2) { width: 13%; }
+.offers-table th:nth-child(3) { width: 23%; }
+.offers-table th:nth-child(4) { width: 11%; }
+.offers-table th:nth-child(5) { width: 9%; }
+.offers-table th:nth-child(6) { width: 12%; }
+.offers-table th:nth-child(7) { width: 18%; }
+
+.offers-table .offer-brand {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.offer-number,
+.offer-price {
+  font-weight: 600;
+}
+
+.offers-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .analogues-table th:nth-child(4) {
+    width: 210px;
+  }
+}

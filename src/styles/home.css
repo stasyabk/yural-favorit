@@ -10,7 +10,7 @@
   color: #fff;
   background:
     linear-gradient(90deg, rgb(12 14 17 / 78%), rgb(12 14 17 / 57%)),
-    url('/image/hero-mustang.png') center 48% / cover no-repeat;
+    url('/images/hero-mustang.png') center 48% / cover no-repeat;
 }
 
 .hero-content {
@@ -112,6 +112,7 @@
 }
 
 .search-results {
+  min-height: calc(100dvh - var(--header-height) + 10px);
   padding-top: 56px;
   padding-bottom: 64px;
   scroll-margin-top: calc(var(--header-height) + 24px);
