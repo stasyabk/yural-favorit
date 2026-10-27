@@ -4,7 +4,7 @@
 
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: 0;
   color: var(--color-text);
   background-color: var(--color-background-secondary);
 }
@@ -201,7 +201,8 @@ h1 {
 }
 
 a:focus-visible,
-button:focus-visible {
+button:focus-visible,
+.btn:focus-visible {
   outline: 3px solid var(--color-primary);
   outline-offset: 4px;
   box-shadow: none;
