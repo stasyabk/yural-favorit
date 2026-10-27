@@ -1,6 +1,12 @@
 :root {
-  --color-primary: #e92327;
+  --color-primary: #ed1c24;
+  --color-primary-hover: #cc1119;
+  --color-primary-soft: #fff0f1;
   --color-text: #202124;
   --color-background: #ffffff;
-  --color-background-secondary: #f5f5f5;
+  --color-background-secondary: #f7f7f7;
+  --color-border: #e8e8e8;
+  --color-muted: #606166;
+  --header-height: 80px;
+  --mobile-menu-height: 164px;
 }
