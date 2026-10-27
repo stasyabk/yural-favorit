@@ -1,0 +1,12 @@
+@import './variables.css';
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+h1 {
+  font-weight: 700;
+}
