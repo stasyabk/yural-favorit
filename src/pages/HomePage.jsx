@@ -3,7 +3,7 @@ import { useLocation, useNavigationType, useOutletContext } from 'react-router-d
 import { useDispatch, useSelector } from 'react-redux';
 import SearchBar from '../components/SearchBar/SearchBar.jsx';
 import PartCard from '../components/PartCard/PartCard.jsx';
-import { setQuery, submitSearch } from '../features/search/searchSlice.js';
+import { clearSearch, setQuery, submitSearch } from '../features/search/searchSlice.js';
 import { scrollToSearchResults } from '../utils/scroll.js';
 
 export default function HomePage() {
@@ -12,7 +12,7 @@ export default function HomePage() {
   const navigationType = useNavigationType();
   const { query, submittedQuery } = useSelector((state) => state.search);
   const [validationError, setValidationError] = useState('');
-  const { searchParts, searchResult } = useOutletContext();
+  const { searchParts, searchResult, cancelSearch } = useOutletContext();
   const { currentData, isUninitialized, isFetching, isError, error } = searchResult;
   const shouldScroll = useRef(false);
   const isEmptyResult = !isUninitialized && !isFetching && !isError && currentData?.length === 0;
@@ -22,11 +22,18 @@ export default function HomePage() {
   }, [location.key, location.state, navigationType]);
 
   useEffect(() => {
-    if (!shouldScroll.current || isUninitialized || isFetching) return;
+    if (!submittedQuery || !shouldScroll.current || isUninitialized || isFetching) return;
     shouldScroll.current = false;
     const frame = requestAnimationFrame(() => scrollToSearchResults());
     return () => cancelAnimationFrame(frame);
-  }, [currentData, isEmptyResult, isError, isFetching, isUninitialized, location.key]);
+  }, [currentData, isEmptyResult, isError, isFetching, isUninitialized, location.key, submittedQuery]);
+
+  function handleClear() {
+    shouldScroll.current = false;
+    cancelSearch();
+    dispatch(clearSearch());
+    setValidationError('');
+  }
 
   function handleChange(value) {
     dispatch(setQuery(value));
@@ -58,13 +65,15 @@ export default function HomePage() {
             value={query}
             onChange={handleChange}
             onSubmit={handleSubmit}
-            isSearching={isFetching}
+            onClear={handleClear}
+            canClear={Boolean(query || submittedQuery)}
+            isSearching={Boolean(submittedQuery) && isFetching}
             validationError={validationError}
           />
         </div>
       </section>
 
-      {!isUninitialized && (
+      {Boolean(submittedQuery) && !isUninitialized && (
         <section
           className="container search-results"
           aria-labelledby={isEmptyResult ? undefined : 'results-title'}
