@@ -1,24 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import SearchBar from '../components/SearchBar/SearchBar.jsx';
 import PartCard from '../components/PartCard/PartCard.jsx';
-import { useGetPartsByNumberQuery, useLazyGetPartsByNumberQuery } from '../services/favoritApi.js';
+import { setQuery, submitSearch } from '../features/search/searchSlice.js';
 import { scrollToSearchResults } from '../utils/scroll.js';
 
 export default function HomePage() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const savedSearch = location.state?.search;
-  const savedNumber = typeof savedSearch?.submittedQuery === 'string' ? savedSearch.submittedQuery : '';
-  const [query, setQuery] = useState(() => typeof savedSearch?.query === 'string' ? savedSearch.query : '');
+  const dispatch = useDispatch();
+  const { query, submittedQuery } = useSelector((state) => state.search);
   const [validationError, setValidationError] = useState('');
-  const [searchParts, submittedResult] = useLazyGetPartsByNumberQuery();
-  const restoredResult = useGetPartsByNumberQuery(savedNumber, {
-    skip: !savedNumber || !submittedResult.isUninitialized,
-    refetchOnMountOrArgChange: false,
-  });
-  const { currentData, originalArgs, isUninitialized, isFetching, isError, error } =
-    submittedResult.isUninitialized ? restoredResult : submittedResult;
+  const { searchParts, searchResult } = useOutletContext();
+  const { currentData, isUninitialized, isFetching, isError, error } = searchResult;
   const shouldScroll = useRef(false);
   const isEmptyResult = !isUninitialized && !isFetching && !isError && currentData?.length === 0;
 
@@ -30,7 +23,7 @@ export default function HomePage() {
   }, [currentData, isEmptyResult, isError, isFetching, isUninitialized]);
 
   function handleChange(value) {
-    setQuery(value);
+    dispatch(setQuery(value));
     setValidationError('');
   }
 
@@ -42,14 +35,9 @@ export default function HomePage() {
       return;
     }
     setValidationError('');
-    setQuery(number);
+    dispatch(submitSearch(number));
     shouldScroll.current = true;
     searchParts(number);
-    navigate(location.pathname + location.search, {
-      replace: true,
-      preventScrollReset: true,
-      state: { ...location.state, search: { query: number, submittedQuery: number } },
-    });
   }
 
   return (
@@ -80,7 +68,7 @@ export default function HomePage() {
           {!isEmptyResult && (
             <>
               <div className="page-label">Результаты поиска</div>
-              <h2 id="results-title">Артикул: <span>{originalArgs}</span></h2>
+              <h2 id="results-title">Артикул: <span>{submittedQuery}</span></h2>
             </>
           )}
           <div aria-live="polite" aria-atomic="true">
@@ -101,7 +89,7 @@ export default function HomePage() {
             <>
               <div className="results-list">
                 <table className="table results-table mb-0">
-                  <caption className="visually-hidden">Найденные детали по артикулу {originalArgs}</caption>
+                  <caption className="visually-hidden">Найденные детали по артикулу {submittedQuery}</caption>
                   <thead>
                     <tr>
                       <th scope="col">Производитель</th>

@@ -6,17 +6,21 @@
 .details-back {
   display: inline-block;
   margin-bottom: 32px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--color-muted);
+  min-height: 44px;
+  padding: 12px 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: #f3f3f3;
+  color: #252525;
   font-size: 0.875rem;
   font-weight: 600;
   text-decoration: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .details-back:hover {
-  color: var(--color-primary);
+  background: #e6e6e6;
+  border-color: #d7d7d7;
 }
 
 .details-identity {
