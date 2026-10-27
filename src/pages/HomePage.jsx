@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useLocation, useNavigationType, useOutletContext } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import SearchBar from '../components/SearchBar/SearchBar.jsx';
 import PartCard from '../components/PartCard/PartCard.jsx';
@@ -8,6 +8,8 @@ import { scrollToSearchResults } from '../utils/scroll.js';
 
 export default function HomePage() {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigationType = useNavigationType();
   const { query, submittedQuery } = useSelector((state) => state.search);
   const [validationError, setValidationError] = useState('');
   const { searchParts, searchResult } = useOutletContext();
@@ -16,11 +18,15 @@ export default function HomePage() {
   const isEmptyResult = !isUninitialized && !isFetching && !isError && currentData?.length === 0;
 
   useEffect(() => {
+    if (navigationType !== 'POP' && location.state?.scrollToTop) shouldScroll.current = false;
+  }, [location.key, location.state, navigationType]);
+
+  useEffect(() => {
     if (!shouldScroll.current || isUninitialized || isFetching) return;
     shouldScroll.current = false;
     const frame = requestAnimationFrame(() => scrollToSearchResults());
     return () => cancelAnimationFrame(frame);
-  }, [currentData, isEmptyResult, isError, isFetching, isUninitialized]);
+  }, [currentData, isEmptyResult, isError, isFetching, isUninitialized, location.key]);
 
   function handleChange(value) {
     dispatch(setQuery(value));

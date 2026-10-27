@@ -14,7 +14,7 @@ export default function Header({ isMenuOpen, onMenuToggle, onMenuClose }) {
   return (
     <header className="site-header sticky-top" onKeyDown={handleKeyDown}>
       <div className="container header-inner">
-        <Link to="/" className="brand" aria-label="YURAL FAVORIT — на главную" onClick={onMenuClose}>
+        <Link to="/" state={{ scrollToTop: true }} className="brand" aria-label="YURAL FAVORIT — на главную" onClick={onMenuClose}>
           <span>YURAL</span> <span className="brand-accent">FAVORIT</span>
         </Link>
         <button
@@ -34,7 +34,7 @@ export default function Header({ isMenuOpen, onMenuToggle, onMenuClose }) {
           aria-label="Основная навигация"
           className={`site-nav${isMenuOpen ? ' site-nav--open' : ''}`}
         >
-          <NavLink to="/" end className="nav-link" onClick={onMenuClose}>Главная</NavLink>
+          <NavLink to="/" state={{ scrollToTop: true }} end className="nav-link" onClick={onMenuClose}>Главная</NavLink>
           <NavLink to="/about" className="nav-link" onClick={onMenuClose}>О нас</NavLink>
           <NavLink to="/contacts" className="nav-link" onClick={onMenuClose}>Контакты</NavLink>
         </nav>
